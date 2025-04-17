@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
-import { errorResponse } from "../../route";
+import { errorResponse } from "@/lib/http/errorResponse";
 import dbConnect from "@/lib/db/connect";
 import PostModel from "@/lib/models/Post";
 import { NextRequest, NextResponse } from "next/server";

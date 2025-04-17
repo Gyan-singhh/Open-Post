@@ -4,12 +4,8 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import dbConnect from "@/lib/db/connect";
 import Postmodel from "@/lib/models/Post";
 import { uploadImage } from "../image-upload/service";
+import { errorResponse } from "@/lib/http/errorResponse";
 
-const errorResponse = (message: string, status: number) => {
-  return NextResponse.json({ error: message }, { status });
-};
-
-export { errorResponse };
 
 export async function GET() {
   try {

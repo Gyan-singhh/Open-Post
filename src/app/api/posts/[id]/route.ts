@@ -3,7 +3,7 @@ import dbConnect from "@/lib/db/connect";
 import PostModel from "@/lib/models/Post";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
-import { errorResponse } from "../route";
+import { errorResponse } from "@/lib/http/errorResponse";
 import { cloudinary } from "../../image-upload/service";
 
 export async function GET(
