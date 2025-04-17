@@ -6,18 +6,24 @@ import PostModel from "@/lib/models/Post";
 import { NextRequest, NextResponse } from "next/server";
 import Comment from "@/lib/models/Comment";
 
+interface RouteParams {
+  params: {
+    id: string;
+  };
+}
+
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: RouteParams
+): Promise<NextResponse> {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || !session.user || !session.user._id) {
+    if (!session?.user?._id) {
       return errorResponse("Unauthorized request", 401);
     }
 
     const { content } = await request.json();
-    const { id: postId } = await params;
+    const { id: postId } = params;
     const userId = session.user._id;
 
     if (!postId || !content) {
@@ -47,11 +53,11 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: RouteParams
+): Promise<NextResponse> {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || !session.user || !session.user._id) {
+    if (!session?.user?._id) {
       return errorResponse("Unauthorized request", 401);
     }
 
@@ -64,10 +70,12 @@ export async function DELETE(
 
     await dbConnect();
 
-    const post = await PostModel.findById(postId);
-    if (!post) {
-      return errorResponse("Post not found", 404);
+    const comment = await Comment.findById(commentId);
+
+    if (!comment || comment.author.toString() !== session.user._id) {
+      return errorResponse("Unauthorized to delete this comment", 403);
     }
+    
     await PostModel.findByIdAndUpdate(postId, {
       $pull: { comments: commentId },
     });

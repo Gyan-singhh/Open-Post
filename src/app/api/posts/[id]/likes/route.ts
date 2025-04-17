@@ -5,18 +5,24 @@ import dbConnect from "@/lib/db/connect";
 import PostModel from "@/lib/models/Post";
 import { NextResponse } from "next/server";
 
+interface RouteParams {
+  params: {
+    id: string;
+  };
+}
+
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
-) {
+  { params }: RouteParams
+): Promise<NextResponse> {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session) {
+    if (!session?.user) {
       return errorResponse("Unauthorized request", 401);
     }
 
-    const { id } = await params;
+    const { id } = params;
     const userId = session.user._id;
 
     if (!id || !userId) {

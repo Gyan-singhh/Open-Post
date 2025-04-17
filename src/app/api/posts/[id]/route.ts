@@ -6,18 +6,24 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import { errorResponse } from "../route";
 import { cloudinary } from "../../image-upload/service";
 
+interface RouteParams {
+  params: {
+    id: string;
+  };
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: RouteParams
+): Promise<NextResponse> {
   try {
     await dbConnect();
-    const { id } = await params;
+    const { id } = params;
     const post = await PostModel.findById(id).populate({
       path: "comments",
       populate: {
-        path: "author", 
-        select: "_id username image", 
+        path: "author",
+        select: "_id username image",
       },
     });
 
@@ -33,8 +39,8 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: RouteParams
+): Promise<NextResponse> {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user || !session.user._id) {
