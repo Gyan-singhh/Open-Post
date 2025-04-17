@@ -6,19 +6,13 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import { errorResponse } from "../route";
 import { cloudinary } from "../../image-upload/service";
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
 export async function GET(
   request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse> {
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await dbConnect();
-    const { id } = params;
+    const id = (await params).id;
     const post = await PostModel.findById(id).populate({
       path: "comments",
       populate: {
@@ -39,15 +33,15 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse> {
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user || !session.user._id) {
       return errorResponse("Unauthorized request", 401);
     }
 
-    const { id } = await params;
+    const id = (await params).id;
 
     if (!id) {
       return errorResponse("Post ID is required", 400);

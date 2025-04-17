@@ -11,7 +11,7 @@ const errorResponse = (message: string, status: number) => {
 
 export { errorResponse };
 
-export async function GET(): Promise<NextResponse> {
+export async function GET() {
   try {
     await dbConnect();
     const posts = await Postmodel.find().sort({ createdAt: -1 });
@@ -22,7 +22,7 @@ export async function GET(): Promise<NextResponse> {
   }
 }
 
-export async function POST(request: Request): Promise<NextResponse> {
+export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?._id) {
