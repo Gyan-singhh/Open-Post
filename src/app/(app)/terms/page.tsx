@@ -52,7 +52,7 @@ export default function TermsPage() {
           <h2 className="text-xl font-semibold mt-6">5. Platform Updates</h2>
           <p>
             We may update these Terms occasionally to reflect changes in our
-            services, policies, or legal requirements. We’ll try to notify users
+            services, policies, or legal requirements. We&apos;ll try to notify users
             of major changes, but it is your responsibility to stay informed.
           </p>
 

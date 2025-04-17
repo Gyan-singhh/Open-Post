@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaSpinner } from "react-icons/fa";
 
 function Loading() {
@@ -7,12 +8,15 @@ function Loading() {
         <div className="flex justify-center">
           <FaSpinner className="animate-spin h-8 w-8 text-green-600 dark:text-white" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Loading...</h1>
-        <p className="text-gray-600 dark:text-gray-300">Please wait while we prepare your content</p>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+          Loading...
+        </h1>
+        <p className="text-gray-600 dark:text-gray-300">
+          Please wait while we prepare your content
+        </p>
       </div>
     </div>
   );
-  
 }
 
 function ErrorDisplay({ error }: { error: Error }) {
@@ -80,15 +84,16 @@ function NotFoundDisplay() {
           Not found
         </h3>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          The page you're looking for doesn't exist or may have been removed.
+          The page you&apos;re looking for doesn&apos;t exist or may have been
+          removed.
         </p>
         <div className="mt-6">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             Go back home
-          </a>
+          </Link>
         </div>
       </div>
     </div>

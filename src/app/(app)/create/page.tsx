@@ -9,6 +9,7 @@ import { X } from "lucide-react";
 import { createPost } from "@/lib/http/api";
 import { PostCreateInput } from "@/lib/schema/post";
 import { Post } from "@/types";
+import Image from "next/image";
 
 const CreatePostPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -150,8 +151,10 @@ const CreatePostPage: React.FC = () => {
 
                   {preview && (
                     <div className="mt-4 relative inline-block">
-                      <img
+                      <Image
                         src={preview}
+                        width={300}
+                        height={240}
                         alt="Preview"
                         className="max-h-60 rounded-md object-cover"
                       />

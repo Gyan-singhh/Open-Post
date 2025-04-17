@@ -3,8 +3,9 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
-import { FaSignInAlt, FaBlog } from "react-icons/fa";
+import { FaSignInAlt } from "react-icons/fa";
 import Image from "next/image";
+
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -32,7 +33,9 @@ export default function Navbar() {
             {session ? (
               <>
                 <div className="md:flex items-center space-x-2">
-                  <img
+                  <Image
+                    width={50}
+                    height={50}
                     src={
                       session?.user?.image ||
                       "https://cdn-icons-png.flaticon.com/512/2202/2202112.png"
