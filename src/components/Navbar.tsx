@@ -21,6 +21,7 @@ export default function Navbar() {
                 alt="OpenPost Logo"
                 width={50}
                 height={50}
+                priority={true}
                 className="mr-2"
               />
               <span className="bg-gradient-to-t from-[#83ab16] to-[#39B54A] bg-clip-text text-transparent font-bold text-2xl">
@@ -36,6 +37,7 @@ export default function Navbar() {
                   <Image
                     width={50}
                     height={50}
+                    priority={true}
                     src={
                       session?.user?.image ||
                       "https://cdn-icons-png.flaticon.com/512/2202/2202112.png"

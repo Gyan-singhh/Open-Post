@@ -104,7 +104,8 @@ export default function PostDetailsPage() {
               alt={post.title}
               fill
               className="object-cover"
-              priority
+              priority={true}
+              quality={75}
             />
           </div>
         )}
