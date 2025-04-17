@@ -39,9 +39,9 @@ export async function POST(
     await post.save();
 
     return NextResponse.json(newComment, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating Comment:", error);
-    return errorResponse(error.message || "Failed to create post", 500);
+    return errorResponse("Failed to create post", 500);
   }
 }
 
@@ -74,8 +74,8 @@ export async function DELETE(
     await Comment.findByIdAndDelete(commentId);
 
     return NextResponse.json({ message: "Comment deleted" }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error deleting Comment:", error);
-    return errorResponse(error.message || "Failed to create post", 500);
+    return errorResponse("Failed to create post", 500);
   }
 }

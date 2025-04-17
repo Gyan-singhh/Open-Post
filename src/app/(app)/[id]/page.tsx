@@ -16,7 +16,7 @@ import {
   ErrorDisplay,
   Loading,
   NotFoundDisplay,
-} from "@/components/UIStatus.tsx";
+} from "@/components/UIStatus";
 import { FaHeart, FaRegHeart, FaTrash, FaUser } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

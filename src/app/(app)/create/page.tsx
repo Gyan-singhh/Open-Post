@@ -1,31 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { createPost } from "@/lib/http/api";
-import { Post } from "@/types";
-import { PostCreateInput } from "@/lib/schema/post";
 import { useRouter } from "next/navigation";
+import { X } from "lucide-react";
+
+import { createPost } from "@/lib/http/api";
+import { PostCreateInput } from "@/lib/schema/post";
+import { Post } from "@/types";
 
 const CreatePostPage: React.FC = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [preview, setPreview] = useState<string | null>(null);
+
   const router = useRouter();
   const {
     register,
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = useForm<PostCreateInput>();
-
-  const [errorMessage, setErrorMessage] = useState("");
 
   const { mutate, isPending } = useMutation<Post, Error, FormData>({
     mutationFn: createPost,
     onSuccess: () => {
       router.push("/");
-      reset();
       setErrorMessage("");
+      setPreview(null);
     },
     onError: (error: Error) => {
       setErrorMessage(error.message || "Failed to create post");
@@ -33,18 +35,27 @@ const CreatePostPage: React.FC = () => {
   });
 
   const onSubmit = async (data: PostCreateInput) => {
-    if (!data.image || data.image.length === 0) {
-      setErrorMessage("Image is required");
-      return;
-    }
-
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("content", data.content);
-    formData.append("image", data.image[0]);
+    formData.append("image", data.image);
 
     mutate(formData);
   };
+
+  const handleRemoveImage = () => {
+    if (preview) URL.revokeObjectURL(preview);
+    setPreview(null);
+
+    const fileInput = document.getElementById("image") as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
+  };
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
@@ -113,15 +124,51 @@ const CreatePostPage: React.FC = () => {
               name="image"
               control={control}
               rules={{ required: "Image is required" }}
-              render={({ field: { onChange, value, ...rest } }) => (
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="image"
-                  onChange={(e) => onChange(e.target.files)}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  {...rest}
-                />
+              render={({ field: { onChange, onBlur, name, ref } }) => (
+                <>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="image"
+                    name={name}
+                    ref={ref}
+                    onBlur={onBlur}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        if (preview) URL.revokeObjectURL(preview);
+                        const url = URL.createObjectURL(file);
+                        setPreview(url);
+                        onChange(file);
+                      } else {
+                        handleRemoveImage();
+                        onChange(null);
+                      }
+                    }}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+
+                  {preview && (
+                    <div className="mt-4 relative inline-block">
+                      <img
+                        src={preview}
+                        alt="Preview"
+                        className="max-h-60 rounded-md object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleRemoveImage();
+                          onChange(null);
+                        }}
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                        title="Remove image"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             />
 

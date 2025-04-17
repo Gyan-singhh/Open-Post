@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaSpinner } from "react-icons/fa";
-import { Loading } from "@/components/UIStatus.tsx";
+import { Loading } from "@/components/UIStatus";
+
+import Link from "next/link";
 
 export default function LoginPage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
 
@@ -23,6 +25,7 @@ export default function LoginPage() {
     try {
       await signIn(provider, { callbackUrl: "/" });
     } catch (error) {
+      console.error("SignIn Error:", error);
       setLoadingProvider(null);
     }
   };
@@ -86,13 +89,13 @@ export default function LoginPage() {
         <div className="mt-8 text-center">
           <p className="text-gray-500 text-sm">
             By continuing, you agree to our{" "}
-            <a href="/terms" className="text-blue-600 hover:underline">
+            <Link href="/terms" className="text-blue-600 hover:underline">
               Terms of Service
-            </a>{" "}
+            </Link>{" "}
             and{" "}
-            <a href="/terms" className="text-blue-600 hover:underline">
+            <Link href="/terms" className="text-blue-600 hover:underline">
               Privacy Policy
-            </a>
+            </Link>
           </p>
         </div>
       </div>

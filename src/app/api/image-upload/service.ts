@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -18,6 +18,13 @@ interface UploadResult {
   bytes: number;
 }
 
+class CloudinaryUploadError extends Error {
+  constructor(message: string) {
+    super(`Cloudinary upload failed: ${message}`);
+    this.name = "CloudinaryUploadError";
+  }
+}
+
 export const uploadImage = async (imageFile: File): Promise<UploadResult> => {
   if (!ALLOWED_FILE_TYPES.includes(imageFile.type)) {
     throw new Error("Invalid file type. Only JPEG, PNG, and WebP are allowed");
@@ -31,20 +38,29 @@ export const uploadImage = async (imageFile: File): Promise<UploadResult> => {
 
   const buffer = Buffer.from(await imageFile.arrayBuffer());
 
-  const uploadResponse = await new Promise<any>((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: "openpost_images",
-        public_id: `img_${Date.now()}`,
-        resource_type: "auto",
-      },
-      (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
-      }
-    );
-    uploadStream.end(buffer);
-  });
+  const uploadResponse = await new Promise<UploadApiResponse>(
+    (resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "openpost_images",
+          public_id: `img_${Date.now()}`,
+          resource_type: "auto",
+        },
+        (error, result) => {
+          if (error) {
+            reject(new CloudinaryUploadError(error.message));
+          } else if (!result) {
+            reject(
+              new CloudinaryUploadError("No result returned from Cloudinary")
+            );
+          } else {
+            resolve(result);
+          }
+        }
+      );
+      uploadStream.end(buffer);
+    }
+  );
 
   return {
     url: uploadResponse.secure_url,

@@ -1,6 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { Loading } from "./UIStatus.tsx";
+import { Loading } from "./UIStatus";
 
 export default function SessionCheck({
   children,

@@ -10,7 +10,7 @@ import {
   ErrorDisplay,
   Loading,
   NotFoundDisplay,
-} from "@/components/UIStatus.tsx";
+} from "@/components/UIStatus";
 
 const PostsPage = () => {
   const {

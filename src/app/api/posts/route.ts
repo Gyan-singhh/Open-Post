@@ -50,13 +50,12 @@ export async function POST(request: Request) {
         public_id: publicId,
       },
       likes: [],
-      comments:[],
+      comments: [],
     });
     await newPost.save();
     return NextResponse.json(newPost, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating post:", error);
-    return errorResponse(error.message || "Failed to create post", 500);
+    return errorResponse("Failed to create post", 500);
   }
 }
-

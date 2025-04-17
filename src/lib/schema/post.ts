@@ -7,11 +7,9 @@ export const PostCreateSchema = z.object({
   likes: z.array(z.string()).optional(),
   comments: z.array(z.string()).optional(),
   image: z
-    .instanceof(FileList)
-    .refine((fileList) => fileList.length > 0, "Image is required")
+    .instanceof(File, { message: "Image is required" })
     .refine(
-      (fileList) =>
-        ["image/jpeg", "image/png", "image/webp"].includes(fileList[0]?.type),
+      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
       "Only JPEG, PNG, or WebP files are allowed"
     ),
 });
