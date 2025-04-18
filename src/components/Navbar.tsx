@@ -62,7 +62,7 @@ export default function Navbar() {
                 className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full hover:from-green-600 hover:to-emerald-600 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-300"
               >
                 <FaSignInAlt className="text-base" />
-                <span className="hidden sm:inline">Sign In</span>
+                <span>Sign In</span>
               </Link>
             )}
           </div>
