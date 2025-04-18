@@ -12,6 +12,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "OpenPost",
   description: "Create, share, and explore posts.",
+  icons: {
+    icon: "/Logo.png",
+  },
 };
 
 export default function RootLayout({
